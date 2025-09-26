@@ -33,7 +33,7 @@ export default function NavBar(props) {
   }
 
   return (
-    <nav className='w-full bg-white md:pt-0  relative z-20 shadow border-t border-gray-100 dark:border-hexo-black-gray dark:bg-black'>
+    <nav className='sticky top-0 w-full bg-white md:pt-0  z-20 shadow border-t border-gray-100 dark:border-hexo-black-gray dark:bg-black'>
       <div
         id='nav-bar-inner'
         className='h-12 mx-auto max-w-9/10 justify-between items-center text-sm md:text-md md:justify-start'>
