@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useSimpleGlobal } from '..'
 import { MenuList } from './MenuList'
+import Link from 'next/link'
+import Image from 'next/image' // 步骤 1: 导入 Image 组件
 
 /**
  * 菜单导航
@@ -33,10 +35,10 @@ export default function NavBar(props) {
   }
 
   return (
-    <nav className='sticky top-0 w-full bg-white md:pt-0  z-20 shadow border-t border-gray-100 dark:border-hexo-black-gray dark:bg-black'>
+    <nav className='sticky top-0 w-full bg-white md:pt-0  z-20  dark:border-hexo-black-gray dark:bg-black'>
       <div
         id='nav-bar-inner'
-        className='h-12 mx-auto max-w-9/10 justify-between items-center text-sm md:text-md md:justify-start'>
+        className='h-24 mx-auto max-w-9/10 justify-between items-center text-sm md:text-md md:justify-start'>
         {/* 左侧菜单 */}
         <div className='h-full w-full float-left text-center md:text-left flex flex-wrap items-stretch md:justify-start md:items-start space-x-4'>
           {showSearchInput && (

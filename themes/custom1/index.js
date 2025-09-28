@@ -81,7 +81,7 @@ const LayoutBase = props => {
         {/* 导航栏 */}
         <NavBar {...props} />
         {/* 顶部LOGO */}
-        <Header {...props} />
+        { /* <Header {...props} /> */ }
 
 
         {/* 主体 */}
