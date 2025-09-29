@@ -1,3 +1,9 @@
+/**
+ * Custom1主题的入口文件
+ * 包含了整个主题的布局结构和页面组织
+ */
+
+// 引入全局公共组件
 import { AdSlot } from '@/components/GoogleAdsense'
 import replaceSearchResult from '@/components/Mark'
 import NotionPage from '@/components/NotionPage'
@@ -13,57 +19,83 @@ import BlogPostBar from './components/BlogPostBar'
 import CONFIG from './config'
 import { Style } from './style'
 
+// 搜索模态框组件 - 使用动态导入以优化首屏加载
 const AlgoliaSearchModal = dynamic(
   () => import('@/components/AlgoliaSearchModal'),
   { ssr: false }
 )
 
-// 主题组件
-const BlogListScroll = dynamic(() => import('./components/BlogListScroll'), {
+// 主题组件 - 全部使用动态导入以优化性能
+// 文章列表相关组件
+const BlogListScroll = dynamic(() => import('./components/BlogListScroll'), { // 滚动加载的文章列表
   ssr: false
 })
-const BlogArchiveItem = dynamic(() => import('./components/BlogArchiveItem'), {
+const BlogListPage = dynamic(() => import('./components/BlogListPage'), { // 分页形式的文章列表
   ssr: false
 })
-const ArticleLock = dynamic(() => import('./components/ArticleLock'), {
-  ssr: false
-})
-const ArticleInfo = dynamic(() => import('./components/ArticleInfo'), {
-  ssr: false
-})
-const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
-const ArticleAround = dynamic(() => import('./components/ArticleAround'), {
-  ssr: false
-})
-const ShareBar = dynamic(() => import('@/components/ShareBar'), { ssr: false })
-const TopBar = dynamic(() => import('./components/TopBar'), { ssr: false })
-const Header = dynamic(() => import('./components/Header'), { ssr: false })
-const NavBar = dynamic(() => import('./components/NavBar'), { ssr: false })
-const SideBar = dynamic(() => import('./components/SideBar'), { ssr: false })
-const JumpToTopButton = dynamic(() => import('./components/JumpToTopButton'), {
-  ssr: false
-})
-const Footer = dynamic(() => import('./components/Footer'), { ssr: false })
-const SearchInput = dynamic(() => import('./components/SearchInput'), {
-  ssr: false
-})
-const WWAds = dynamic(() => import('@/components/WWAds'), { ssr: false })
-const BlogListPage = dynamic(() => import('./components/BlogListPage'), {
-  ssr: false
-})
-const RecommendPosts = dynamic(() => import('./components/RecommendPosts'), {
+const BlogArchiveItem = dynamic(() => import('./components/BlogArchiveItem'), { // 归档页的文章项
   ssr: false
 })
 
-// 主题全局状态
+// 文章详情页相关组件
+const ArticleLock = dynamic(() => import('./components/ArticleLock'), { // 文章加密锁定组件
+  ssr: false
+})
+const ArticleInfo = dynamic(() => import('./components/ArticleInfo'), { // 文章信息展示
+  ssr: false
+})
+const ArticleAround = dynamic(() => import('./components/ArticleAround'), { // 上一篇/下一篇导航
+  ssr: false
+})
+const RecommendPosts = dynamic(() => import('./components/RecommendPosts'), { // 推荐文章
+  ssr: false
+})
+
+// 布局结构组件
+const TopBar = dynamic(() => import('./components/TopBar'), { // 顶部工具栏
+  ssr: false
+})
+const Header = dynamic(() => import('./components/Header'), { // 站点头部
+  ssr: false
+})
+const NavBar = dynamic(() => import('./components/NavBar'), { // 导航栏
+  ssr: false
+})
+const SideBar = dynamic(() => import('./components/SideBar'), { // 侧边栏
+  ssr: false
+})
+const Footer = dynamic(() => import('./components/Footer'), { // 页脚
+  ssr: false
+})
+
+// 功能性组件
+const Comment = dynamic(() => import('@/components/Comment'), { ssr: false }) // 评论系统
+const ShareBar = dynamic(() => import('@/components/ShareBar'), { ssr: false }) // 分享工具栏
+const SearchInput = dynamic(() => import('./components/SearchInput'), { // 搜索输入框
+  ssr: false
+})
+const JumpToTopButton = dynamic(() => import('./components/JumpToTopButton'), { // 返回顶部按钮
+  ssr: false
+})
+const WWAds = dynamic(() => import('@/components/WWAds'), { ssr: false }) // 广告组件
+
+/**
+ * 主题全局状态管理
+ * 使用 React Context API 创建一个主题级别的状态管理器
+ * 主要用于管理搜索模态框等全局状态
+ */
 const ThemeGlobalSimple = createContext()
 export const useSimpleGlobal = () => useContext(ThemeGlobalSimple)
 
 /**
- * 基础布局
- *
- * @param {*} props
- * @returns
+ * 基础布局组件 - 整个主题的骨架结构
+ * 包含了页面的基本布局结构，如导航栏、内容区、侧边栏等
+ * 所有页面都基于这个基础布局构建
+ * 
+ * @param {Object} props 组件属性
+ * @param {ReactNode} props.children 子组件，通常是页面主体内容
+ * @param {ReactNode} props.slotTop 顶部插槽内容
+ * @returns {JSX.Element} 返回页面骨架结构
  */
 const LayoutBase = props => {
   const { children, slotTop } = props
@@ -87,12 +119,8 @@ const LayoutBase = props => {
         {/* 主体 */}
         <div
           id='container-wrapper'
-          className={
-            (JSON.parse(siteConfig('LAYOUT_SIDEBAR_REVERSE'))
-              ? 'flex-row-reverse'
-              : '') + ' w-full flex-1 flex items-start max-w-9/10 mx-auto pt-12'
-          }>
-          <div id='container-inner ' className='w-full flex-grow min-h-fit'>
+          className='w-full flex-1 flex items-start max-w-7xl mx-auto pt-12 px-4'>
+          <div id='container-inner' className='w-full flex-grow min-h-fit'>
             <Transition
               show={!onLoading}
               appear={true}
@@ -109,14 +137,6 @@ const LayoutBase = props => {
             </Transition>
             <AdSlot type='native' />
           </div>
-
-          {fullWidth ? null : (
-            <div
-              id='right-sidebar'
-              className='hidden xl:block flex-none sticky top-8 w-96 border-l dark:border-gray-800 pl-12 border-gray-100'>
-              <SideBar {...props} />
-            </div>
-          )}
         </div>
 
         <div className='fixed right-4 bottom-4 z-20'>
@@ -133,18 +153,24 @@ const LayoutBase = props => {
 }
 
 /**
- * 博客首页
- * 首页就是列表
- * @param {*} props
- * @returns
+ * 博客首页布局组件
+ * 本质上是博客文章列表的展示页面
+ * 复用了 LayoutPostList 组件的功能
+ * 
+ * @param {Object} props 组件属性，会直接传递给 LayoutPostList
+ * @returns {JSX.Element} 博客首页视图
  */
 const LayoutIndex = props => {
   return <LayoutPostList {...props} />
 }
+
 /**
- * 博客列表
- * @param {*} props
- * @returns
+ * 博客文章列表布局组件
+ * 可以通过配置以分页或滚动加载的方式展示文章列表
+ * 包含了文章导航栏和文章列表两个主要部分
+ * 
+ * @param {Object} props 组件属性
+ * @returns {JSX.Element} 文章列表页面
  */
 const LayoutPostList = props => {
   return (
@@ -160,10 +186,13 @@ const LayoutPostList = props => {
 }
 
 /**
- * 搜索页
- * 也是博客列表
- * @param {*} props
- * @returns
+ * 搜索结果页面布局组件
+ * 基于博客列表布局，但增加了搜索关键词高亮和搜索输入框功能
+ * 支持 Algolia 搜索和内置搜索两种模式
+ * 
+ * @param {Object} props 组件属性
+ * @param {string} props.keyword 搜索关键词
+ * @returns {JSX.Element} 搜索结果页面
  */
 const LayoutSearch = props => {
   const { keyword } = props
@@ -189,9 +218,13 @@ const LayoutSearch = props => {
 }
 
 /**
- * 归档页
- * @param {*} props
- * @returns
+ * 归档页面布局组件
+ * 按时间顺序展示所有文章的归档视图
+ * 文章按照时间分组展示，支持年份和月份的层级展示
+ * 
+ * @param {Object} props 组件属性
+ * @param {Object} props.archivePosts 按时间分组的文章数据
+ * @returns {JSX.Element} 归档页面
  */
 const LayoutArchive = props => {
   const { archivePosts } = props
@@ -211,9 +244,22 @@ const LayoutArchive = props => {
 }
 
 /**
- * 文章详情
- * @param {*} props
- * @returns
+ * 文章详情页面布局组件
+ * 展示单篇文章的完整内容，包括:
+ * - 文章信息(标题、作者、发布时间等)
+ * - 文章主体内容(Notion渲染)
+ * - 文章互动功能(分享、评论等)
+ * - 相关文章推荐
+ * 支持文章加密功能
+ * 
+ * @param {Object} props 组件属性
+ * @param {Object} props.post 文章数据对象
+ * @param {boolean} props.lock 文章是否加密
+ * @param {boolean} props.validPassword 密码是否有效
+ * @param {Object} props.prev 上一篇文章
+ * @param {Object} props.next 下一篇文章
+ * @param {Array} props.recommendPosts 推荐文章列表
+ * @returns {JSX.Element} 文章详情页面
  */
 const LayoutSlug = props => {
   const { post, lock, validPassword, prev, next, recommendPosts } = props
@@ -259,9 +305,15 @@ const LayoutSlug = props => {
 }
 
 /**
- * 404
- * @param {*} props
- * @returns
+ * 404错误页面布局组件
+ * 处理页面未找到的情况
+ * 包含自动检测和跳转逻辑：
+ * - 等待一定时间检查页面是否加载
+ * - 如果页面仍未加载成功则跳转到404页面
+ * 
+ * @param {Object} props 组件属性
+ * @param {Object} props.post 文章数据(如果有)
+ * @returns {JSX.Element} 404页面
  */
 const Layout404 = props => {
   const { post } = props
@@ -289,9 +341,13 @@ const Layout404 = props => {
 }
 
 /**
- * 分类列表
- * @param {*} props
- * @returns
+ * 分类列表页面布局组件
+ * 展示所有文章分类及其文章数量
+ * 每个分类项都是可点击的链接，跳转到对应分类的文章列表
+ * 
+ * @param {Object} props 组件属性
+ * @param {Array} props.categoryOptions 分类选项列表，每项包含分类名称和文章数量
+ * @returns {JSX.Element} 分类列表页面
  */
 const LayoutCategoryIndex = props => {
   const { categoryOptions } = props
@@ -321,9 +377,17 @@ const LayoutCategoryIndex = props => {
 }
 
 /**
- * 标签列表
- * @param {*} props
- * @returns
+ * 标签列表页面布局组件
+ * 展示所有文章标签的云图
+ * 特点：
+ * - 支持标签颜色自定义
+ * - 显示每个标签的文章数量
+ * - 标签点击后跳转到该标签的文章列表
+ * - 响应式布局，自适应不同屏幕尺寸
+ * 
+ * @param {Object} props 组件属性
+ * @param {Array} props.tagOptions 标签选项列表，每项包含标签名称、颜色和文章数量
+ * @returns {JSX.Element} 标签列表页面
  */
 const LayoutTagIndex = props => {
   const { tagOptions } = props

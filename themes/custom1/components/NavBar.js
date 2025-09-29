@@ -1,72 +1,83 @@
 import { siteConfig } from '@/lib/config'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useSimpleGlobal } from '..'
-import { MenuList } from './MenuList'
 import Link from 'next/link'
-import Image from 'next/image' // 步骤 1: 导入 Image 组件
+import Image from 'next/image'
+import { Transition } from '@headlessui/react'
 
 /**
- * 菜单导航
- * @param {*} props
- * @returns
+ * 顶部导航栏组件
+ * @param {Object} props 组件属性
+ * @returns {JSX.Element} 导航栏组件
  */
 export default function NavBar(props) {
-  const [showSearchInput, changeShowSearchInput] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const router = useRouter()
-  const { searchModal } = useSimpleGlobal()
 
-  // 展示搜索框
-  const toggleShowSearchInput = () => {
-    if (siteConfig('ALGOLIA_APP_ID')) {
-      searchModal.current.openSearch()
-    } else {
-      changeShowSearchInput(!showSearchInput)
-    }
-  }
-
-  const onKeyUp = e => {
-    if (e.keyCode === 13) {
-      const search = document.getElementById('simple-search').value
-      if (search) {
-        router.push({ pathname: '/search/' + search })
-      }
-    }
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
   }
 
   return (
-    <nav className='sticky top-0 w-full bg-white md:pt-0  z-20  dark:border-hexo-black-gray dark:bg-black'>
-      <div
-        id='nav-bar-inner'
-        className='h-24 mx-auto max-w-9/10 justify-between items-center text-sm md:text-md md:justify-start'>
-        {/* 左侧菜单 */}
-        <div className='h-full w-full float-left text-center md:text-left flex flex-wrap items-stretch md:justify-start md:items-start space-x-4'>
-          {showSearchInput && (
-            <input
-              autoFocus
-              id='simple-search'
-              onKeyUp={onKeyUp}
-              className='float-left w-full outline-none h-full px-4'
-              aria-label='Submit search'
-              type='search'
-              name='s'
-              autoComplete='off'
-              placeholder='Type then hit enter to search...'
+    <nav className='sticky top-0 w-full bg-white z-30 dark:bg-black border-b dark:border-gray-800'>
+      <div className='h-24 px-4 mx-auto flex items-center max-w-9/10'>
+        {/* Logo和菜单容器 */}
+        <div className='flex items-center space-x-6 relative z-30'>
+          {/* Logo */}
+          <Link href="/" className='flex items-center'>
+            <Image
+              src="/favicon.ico"
+              alt="Logo"
+              width={28}
+              height={28}
+              className="rounded-sm"
             />
-          )}
-          {!showSearchInput && <MenuList {...props} />}
+          </Link>
+
+          {/* 菜单按钮 */}
+          <button
+            onClick={toggleMenu}
+            className="text-base hover:border-b border-gray-900 dark:border-gray-100 transition-all duration-200"
+            aria-label="Toggle Menu"
+          >
+            {isMenuOpen ? 'Close' : 'Menu'}
+          </button>
         </div>
 
-        <div className='absolute right-12 h-full text-center px-2 flex items-center text-blue-400  cursor-pointer'>
-          {/* <!-- extra links --> */}
-          <i
-            className={
-              showSearchInput
-                ? 'fa-regular fa-circle-xmark'
-                : 'fa-solid fa-magnifying-glass' + ' align-middle'
-            }
-            onClick={toggleShowSearchInput}></i>
-        </div>
+        {/* 侧边菜单抽屉 - 先添加一个简单的实现，后续会抽出为单独组件 */}
+        <Transition
+          show={isMenuOpen}
+          enter="transition-opacity duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50"
+            onClick={() => setIsMenuOpen(false)}
+          />
+        </Transition>
+
+        <Transition
+          show={isMenuOpen}
+          enter="transition-transform duration-300"
+          enterFrom="-translate-x-full"
+          enterTo="translate-x-0"
+          leave="transition-transform duration-300"
+          leaveFrom="translate-x-0"
+          leaveTo="-translate-x-full"
+          className="fixed left-0 top-0 h-full w-80 bg-white dark:bg-gray-900 shadow-xl transform z-20"
+        >
+          {/* 菜单内容 */}
+          <div className="p-8">
+            <div className="mt-12">
+              <h2 className="text-xl font-bold mb-4">菜单</h2>
+              {/* 这里后续会使用 MenuList 组件 */}
+            </div>
+          </div>
+        </Transition>
       </div>
     </nav>
   )
