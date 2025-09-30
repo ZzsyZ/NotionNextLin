@@ -47,13 +47,9 @@ export default function NavBar(props) {
                 className="ml-1 w-4 h-4"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#000"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
                 aria-hidden="true"
               >
-                <path d="M6 9l6 6 6-6" />
+                <path d="M12 15l-6-6h12z" fill="#000" />
               </svg>
             )}
           </button>
