@@ -43,16 +43,18 @@ export default function NavBar(props) {
             {isMenuOpen ? 'Close' : 'Menu'}
             {/* 箭头元素：位于 Menu 右侧，距离 Menu 4px；当侧边抽屉打开时隐藏 */}
             {!isMenuOpen && (
-              <div className="ml-1 w-4 h-4 flex items-center justify-center">
-                <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    outline: '1px black solid',
-                    outlineOffset: '-0.50px'
-                  }}
-                />
-              </div>
+              <svg
+                className="ml-1 w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
             )}
           </button>
         </div>
