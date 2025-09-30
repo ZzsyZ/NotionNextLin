@@ -19,17 +19,17 @@ export default function NavBar(props) {
   }
 
   return (
-    <nav className='sticky top-0 w-full bg-white z-30 dark:bg-black border-b dark:border-gray-800'>
-      <div className='h-24 px-4 mx-auto flex items-center max-w-9/10'>
+    <nav className='sticky top-0 w-full bg-white z-30 dark:bg-black border-b border-[#CCCCCC] border-b-[1px]'>
+      <div className='h-20 w-full flex items-center'>
         {/* Logo和菜单容器 */}
-        <div className='flex items-center space-x-6 relative z-30'>
+        <div className='flex items-center relative z-30 ml-4'>
           {/* Logo */}
           <Link href="/" className='flex items-center'>
             <Image
               src="/favicon.ico"
               alt="Logo"
-              width={28}
-              height={28}
+              width={48}
+              height={48}
               className="rounded-sm"
             />
           </Link>
@@ -37,10 +37,23 @@ export default function NavBar(props) {
           {/* 菜单按钮 */}
           <button
             onClick={toggleMenu}
-            className="text-base hover:border-b border-gray-900 dark:border-gray-100 transition-all duration-200"
+            className="text-base hover:border-b border-gray-900 dark:border-gray-100 transition-all duration-200 ml-4 font-normal flex items-center"
             aria-label="Toggle Menu"
           >
             {isMenuOpen ? 'Close' : 'Menu'}
+            {/* 箭头元素：位于 Menu 右侧，距离 Menu 4px；当侧边抽屉打开时隐藏 */}
+            {!isMenuOpen && (
+              <div className="ml-1 w-4 h-4 flex items-center justify-center">
+                <div
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    outline: '1px black solid',
+                    outlineOffset: '-0.50px'
+                  }}
+                />
+              </div>
+            )}
           </button>
         </div>
 
