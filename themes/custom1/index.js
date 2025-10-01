@@ -119,7 +119,7 @@ const LayoutBase = props => {
         {/* 主体 */}
         <div
           id='container-wrapper'
-          className='w-full flex-1 flex items-start max-w-7xl mx-auto pt-12 px-4'>
+          className='w-full flex-1 flex items-start max-w-[1600px] mx-auto pt-12 px-4'>
           <div id='container-inner' className='w-full flex-grow min-h-fit'>
             <Transition
               show={!onLoading}

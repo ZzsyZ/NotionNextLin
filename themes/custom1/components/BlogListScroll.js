@@ -54,7 +54,7 @@ export default function BlogListScroll(props) {
   })
 
   return (
-    <div id='posts-wrapper' className='w-full md:pr-8 mb-12' ref={targetRef}>
+    <div id='posts-wrapper' className='w-full mb-12' ref={targetRef}>
       {postsToShow.map(p => (
         <BlogItem key={p.id} post={p} />
       ))}

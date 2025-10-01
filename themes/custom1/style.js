@@ -23,7 +23,7 @@ const Style = () => {
   }
   
   #theme-simple .blog-item-title {
-    color: #276077;
+    color: black;
   }
   
   .dark #theme-simple .blog-item-title {
@@ -36,19 +36,10 @@ const Style = () => {
   }
   
   
-  /*  菜单下划线动画 */
+  /*  菜单下划线动画已移除 */
   #theme-simple .menu-link {
       text-decoration: none;
-      background-image: linear-gradient(#dd3333, #dd3333);
-      background-repeat: no-repeat;
-      background-position: bottom center;
-      background-size: 0 2px;
-      transition: background-size 100ms ease-in-out;
-  }
-   
-  #theme-simple .menu-link:hover {
-      background-size: 100% 2px;
-      color: #dd3333;
+      color: inherit;
       cursor: pointer;
   }
   
