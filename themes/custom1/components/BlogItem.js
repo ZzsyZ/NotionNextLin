@@ -38,7 +38,7 @@ export const BlogItem = props => {
   return (
     <div
       key={post.id}
-      className={`my-0 border-b border-[#cccccc] dark:border-gray-200 p-4 min-[1540px]:p-16 blog-item-${post.id}`}
+      className={`my-0 border-b border-[#cccccc] dark:border-gray-200 py-4 px-10 min-[1540px]:p-16 blog-item-${post.id}`}
       style={{
         minHeight: isLargeScreen ? `${containerMinHeight}px` : 'auto',
         transition: 'min-height 0.3s ease'
@@ -55,11 +55,11 @@ export const BlogItem = props => {
         }} />
       )}
       
-      <div className='flex flex-col min-[1540px]:flex-row min-[1540px]:justify-between gap-6'>
+      <div className='flex flex-col min-[1540px]:flex-row min-[1540px]:justify-between gap-0 min-[1540px]:gap-6'>
         {/* 图片封面（上方/右侧） */}
         {showPageCover && (
           <div className='article-cover flex-shrink-0 min-[1540px]:order-2'>
-            <div className='overflow-hidden w-full h-[56.25vw] min-[1540px]:w-[30vw] min-[1540px]:h-[16.875vw]'>
+            <div className='overflow-hidden w-full aspect-video min-[1540px]:w-[30vw] min-[1540px]:h-[16.875vw] min-[1540px]:aspect-auto'>
               <SmartLink href={post.href} passHref legacyBehavior>
                 <LazyImage
                   src={post?.pageCoverThumbnail}
@@ -72,56 +72,79 @@ export const BlogItem = props => {
 
         <article className='article-info flex-1 min-[1540px]:mr-6 min-[1540px]:order-1'>
           {/* 第一行：分类和时间 */}
-          <div className='flex items-baseline mt-3 mb-0.5 min-[1540px]:mt-0 min-[1540px]:mb-4'>
+          <div className='flex items-baseline mt-4 mb-0 min-[1540px]:mt-0 min-[1540px]:mb-4'>
             {post.category && (
-              <span className='text-black text-[8px] min-[1540px]:text-[32px] font-normal'>
+              <span className='text-black text-[12px] min-[1540px]:text-[32px] font-normal min-[1540px]:px-1 min-[1540px]:py-0.5 leading-[17px] min-[1540px]:leading-[45px]'>
                 {post.category}
               </span>
             )}
-            <span className='text-[#808080] text-[4px] min-[1540px]:text-[24px] font-normal ml-1 min-[1540px]:ml-4'>
+            <span className='text-[#808080] text-[8px] min-[1540px]:text-[24px] font-normal ml-1 min-[1540px]:ml-4 min-[1540px]:px-1 min-[1540px]:py-0.5 leading-[11px] min-[1540px]:leading-[34px]'>
               {post.date?.start_date || post.createdTime}
             </span>
           </div>
 
-          {/* 第二行：文章标题 */}
-          <div 
-            className='mb-0 mt-0 min-[1540px]:mt-0 leading-normal font-medium text-[12px] min-[1540px]:text-[40px]'
-            style={{
-              lineHeight: '1.5'
-            }}>
-            <SmartLink
-              href={post.href}
-              className='blog-item-title menu-link block'>
-              {siteConfig('POST_TITLE_ICON') && (
-                <NotionIcon icon={post.pageIcon} />
-              )}
-              {post.title}
-            </SmartLink>
-          </div>
+          {/* 内容和按钮的主容器 */}
+          <div className={`${isLargeScreen ? 'block' : 'flex items-end gap-1'}`}>
+            {/* 标题和摘要的文字单元 */}
+            <div className={`${isLargeScreen ? 'w-full' : 'flex-1'}`}>
+              {/* 文章标题 */}
+              <div 
+                className='mb-0 mt-1 min-[1540px]:mt-0 font-medium text-[16px] min-[1540px]:text-[40px] leading-[22px] min-[1540px]:leading-[56px]'
+                style={{
+                  display: !isLargeScreen ? '-webkit-box' : 'block',
+                  WebkitLineClamp: !isLargeScreen ? 1 : 'unset',
+                  WebkitBoxOrient: !isLargeScreen ? 'vertical' : 'unset',
+                  overflow: !isLargeScreen ? 'hidden' : 'visible'
+                }}>
+                <SmartLink
+                  href={post.href}
+                  className='blog-item-title menu-link block'>
+                  {siteConfig('POST_TITLE_ICON') && (
+                    <NotionIcon icon={post.pageIcon} />
+                  )}
+                  {post.title}
+                </SmartLink>
+              </div>
 
-          {/* 第三行：文章摘要 - 包含按钮的容器 */}
-          <div className='flex items-end justify-between min-[1540px]:block'>
-            <div 
-              className='text-[#808080] dark:text-[#808080] leading-normal mt-0 mb-0 min-[1540px]:mb-8 font-medium text-[12px] min-[1540px]:text-[40px] overflow-hidden cursor-pointer flex-1 min-[1540px]:block'
-              style={{
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                lineHeight: '1.5'
-              }}>
-              <SmartLink href={post.href} className='text-[#808080] dark:text-[#808080]'>
-                {post.summary}
-              </SmartLink>
+              {/* 文章摘要 - 紧贴标题 */}
+              <div 
+                className={`${
+                  isLargeScreen 
+                    ? 'text-[#808080] dark:text-[#808080] mb-8 font-medium text-[40px] overflow-hidden cursor-pointer block leading-[56px]' 
+                    : 'text-[#808080] dark:text-[#808080] font-medium text-[16px] overflow-hidden cursor-pointer leading-[22px]'
+                }`}
+                style={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: isLargeScreen ? 2 : 1,
+                  WebkitBoxOrient: 'vertical'
+                }}>
+                <SmartLink href={post.href} className='text-[#808080] dark:text-[#808080]'>
+                  {post.summary}
+                </SmartLink>
+              </div>
             </div>
 
-            {/* 继续阅读按钮 - 在上下布局时与摘要底部对齐并右对齐 */}
-            <div className='ml-2 min-[1540px]:ml-0 min-[1540px]:mt-8'>
-              <SmartLink
-                href={post.href}
-                className='inline-flex items-center justify-center w-[60px] h-[28px] text-[12px] min-[1540px]:w-[120px] min-[1540px]:h-[56px] min-[1540px]:text-[28px] bg-[#F5F5F5] hover:bg-[#EAEAEA] text-black font-medium rounded-[14px] min-[1540px]:rounded-[28px] transition-all duration-200'>
-                More
-              </SmartLink>
-            </div>
+            {/* 继续阅读按钮 - 小屏幕与文字单元底部对齐 */}
+            {!isLargeScreen && (
+              <div className='flex-shrink-0'>
+                <SmartLink
+                  href={post.href}
+                  className='inline-flex items-center justify-center w-[60px] h-[28px] text-[12px] bg-[#F5F5F5] hover:bg-[#EAEAEA] text-black font-medium rounded-[14px] transition-all duration-200'>
+                  More
+                </SmartLink>
+              </div>
+            )}
+            
+            {/* 继续阅读按钮 - 大屏幕 */}
+            {isLargeScreen && (
+              <div className='mt-8'>
+                <SmartLink
+                  href={post.href}
+                  className='inline-flex items-center justify-center w-[120px] h-[56px] text-[28px] bg-[#F5F5F5] hover:bg-[#EAEAEA] text-black font-medium rounded-[28px] transition-all duration-200'>
+                  More
+                </SmartLink>
+              </div>
+            )}
           </div>
         </article>
       </div>
